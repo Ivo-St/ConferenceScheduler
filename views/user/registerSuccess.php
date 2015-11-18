@@ -1,0 +1,1 @@
+<h2>User "<?=$viewModel['username']?>" registered successfuly</h2>
