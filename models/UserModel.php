@@ -64,8 +64,16 @@ class UserModel extends BaseModel
 
         if (!password_verify($password, $dbPassword)) {
             throw new Exception('Username or password does not match');
+        } else {
+            $_SESSION['user_id'] = $id;
+            $_SESSION['username'] = $dbUsername;
+            var_dump($_SESSION);
         }
 
         return $dbUsername;
+    }
+
+    public function isLogged() {
+        return isset($_SESSION['user_id']);
     }
 }

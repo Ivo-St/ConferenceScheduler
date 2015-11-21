@@ -3,26 +3,18 @@ ini_set('display_errors', 1);
 session_start();
 
 include_once('config.php');
+include 'Routing/DefaultRouter.php';
 
-$requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$requestParts = explode('/', $requestPath);
+$router = new DefaultRouter();
 
-$controllerName = DEFAULT_CONTROLLER;
-$controllerAction = DEFAULT_ACTION;
-$controllerParams = [];
-if (count($requestParts) >= DEFAULT_PATH_PREFIX + 1 && $requestParts[DEFAULT_PATH_PREFIX] != '') {
-    $controllerName = $requestParts[DEFAULT_PATH_PREFIX];
-    if (count($requestParts) >= DEFAULT_PATH_PREFIX + 2 && $requestParts[DEFAULT_PATH_PREFIX + 1] != '') {
-        $controllerAction = $requestParts[DEFAULT_PATH_PREFIX + 1];
-        if (count($requestParts) >= DEFAULT_PATH_PREFIX + 3) {
-            $controllerParams = array_slice($requestParts, DEFAULT_PATH_PREFIX + 2);
-        }
-    }
-}
+$controllerName = $router->getController();
+$controllerAction = $router->getAction();
+$controllerParams = $router->getParams();
 
 $controllerClassName = ucfirst($controllerName) . DEFAULT_CONTROLLER_SUFFIX;
+
 if (class_exists($controllerClassName)) {
-    $controller = new $controllerClassName($controllerName, $controllerAction);
+    $controller = new $controllerClassName(lcfirst($controllerName), lcfirst($controllerAction));
     if (method_exists($controller, $controllerAction)) {
         call_user_func_array(array($controller, $controllerAction), $controllerParams);
         $controller->renderView();
