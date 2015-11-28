@@ -1,6 +1,8 @@
 <?php
 
-class UserModel extends BaseModel
+require_once 'contracts/IUserModel.php';
+
+class UserModel extends BaseModel implements IUserModel
 {
     private function isValidUsername($username)
     {
@@ -52,7 +54,12 @@ class UserModel extends BaseModel
             return false;
         }
 
-        $statement = self::$db->prepare("SELECT id,username,password FROM user WHERE username = ?");
+        $statement = self::$db->prepare("SELECT id,username, password FROM user WHERE username = ?");
+
+        if (!$statement) {
+            throw new Exception('An error occurred');
+        }
+
         $statement->bind_param('s', $username);
         $statement->execute();
         $statement->store_result();
@@ -67,13 +74,13 @@ class UserModel extends BaseModel
         } else {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $dbUsername;
-            var_dump($_SESSION);
         }
 
         return $dbUsername;
     }
 
-    public function isLogged() {
+    public function isLogged()
+    {
         return isset($_SESSION['user_id']);
     }
 }
