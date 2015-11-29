@@ -1,2 +1,2 @@
-<a href="<?= $viewModel['controllerName'] . '/login' ?>">Login</a>
-<a href="<?= $viewModel['controllerName'] . '/register' ?>">Register</a>
+<a href="login">Login</a>
+<a href="register">Register</a>

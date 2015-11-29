@@ -10,7 +10,7 @@ class DefaultRouter implements IRouter
 
     function getController()
     {
-        $uri = explode('/', $_SERVER['REQUEST_URI']);
+        $uri = explode('/', strtok($_SERVER["REQUEST_URI"],'?'));
 
         $controller = $uri[DEFAULT_PATH_PREFIX + self::REQUEST_URI_CONTROLLER_INDEX];
 
@@ -23,7 +23,7 @@ class DefaultRouter implements IRouter
 
     function getAction()
     {
-        $uri = explode('/', $_SERVER['REQUEST_URI']);
+        $uri = explode('/', strtok($_SERVER["REQUEST_URI"],'?'));
 
         $action = $uri[DEFAULT_PATH_PREFIX + self::REQUEST_URI_ACTION_INDEX];
 

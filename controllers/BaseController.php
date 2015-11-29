@@ -1,6 +1,10 @@
 <?php
 
 require_once 'views/ViewManager.php';
+include_once 'http context/Session.php';
+include_once 'http context/Cookie.php';
+include_once 'http context/Request.php';
+include_once 'helpers/UserManager.php';
 
 class BaseController
 {
@@ -14,6 +18,10 @@ class BaseController
         $this->controller = $controller;
         $this->action = $action;
         $this->onInitialize();
+        $this->request = new Request();
+        $this->session = new Session();
+        $this->cookie = new Cookie();
+        $this->user = new UserManager();
     }
 
     protected function onInitialize()
@@ -88,6 +96,7 @@ class BaseController
 
     public function isLoggedIn()
     {
-        return isset($_SESSION['username']);
+        var_dump(isset($this->user->userName));
+        return isset($this->user->userName);
     }
 }

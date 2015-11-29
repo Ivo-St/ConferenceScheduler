@@ -19,9 +19,9 @@ class UserController extends BaseController
     public function register()
     {
         if ($this->isPost()) {
-            $username = $_POST['username'];
-            $fullName = $_POST['fullName'];
-            $password = $_POST['password'];
+            $username = $this->request->form->username;
+            $fullName = $this->request->form->fullName;
+            $password = $this->request->form->password;
 
             try {
                 $result = $this->userModel->register($username, $password, $fullName);
@@ -36,25 +36,25 @@ class UserController extends BaseController
         }
     }
 
-
+    /**
+     * @test
+     */
     public function login()
     {
         if ($this->isPost()) {
-            $username = $_POST['username'];
-
-            if ($this->isLoggedIn() && $username == $_SESSION['username']) {
+            $username = $this->request->form->username;
+            if ($this->user->isLoggedIn() && $username == $this->user->userName) {
                 echo 'Username already logged in';
                 return;
             }
 
-            $password = $_POST['password'];
+            $password = $this->request->form->password;
 
             try {
                 $result = $this->userModel->login($username, $password);
                 if ($result) {
                     $this->viewBag['username'] = $result;
                     $this->renderView('loginSuccess');
-                    $_SESSION['username'] = $result;
                     die;
                 }
             } catch (\Exception $e) {
